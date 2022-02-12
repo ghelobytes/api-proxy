@@ -2,15 +2,18 @@ import os
 
 API_KEY_NAME = "x-api-key-name"
 
-config = {
-    "google": {
-        "part": "url",
-        "key": "key",
-        "value": os.getenv("GOOGLE_VISION_API_KEY", "NOT_SET")
-    },
-    "aws": {
-        "part": "header",
-        "key": "x-api-key",
-        "value": os.getenv("AWS_API_KEY", "NOT_SET")
-    }
-}
+
+def get_config() -> dict:
+    config: dict = {}
+    for k, v in os.environ.items():
+        if k.startswith("KEY_"):
+            env = v.split("|")
+            config[k.lower()] = dict(
+                part=env[0],
+                key=env[1],
+                value=env[2],
+            )
+    return config
+
+
+config = get_config()
