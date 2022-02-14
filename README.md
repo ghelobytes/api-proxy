@@ -1,7 +1,7 @@
 # API Proxy
 This is a simple `fastapi` app for proxying API calls that require credentials.
 
-The credentials will be sitting behing the proxy so it's not exposed to client applications.
+The credentials will be sitting behind a proxy so it's not exposed to client applications.
 
 ## Environment variables
 ```
@@ -29,12 +29,25 @@ KEY_AWS_API=header|authorization|Bearer token
 - Run `deta update -e .env` to update the instance environment variables
 
 ## Sample usage
+Assuming an environment variable named `KEY_MY_GOOGLE_TRANSLATE_API=url|key|abcd-efgh-ijkl` was created and set.
+This simply means:
+- `url`: The API key will be attached to the `url` of the request to the API. Possible value `[url, header]`
+- `key`: The word `key` will be added as a query parameter to the `url`
+- `abcd-efgh-ijkl`: This is the actual API key and will be the value of the `key` query parameter
+
+The actual request to the API will look like this:
+```
+https://translation.googleapis.com/language/translate/v2?key=abcd-efgh-ijkl
+```
+
+This is how the proxied request looks like:
+
 ```bash
 # request
 curl -X POST \
   'https://api.ghelo.dev/proxy?url=https://translation.googleapis.com/language/translate/v2' \
   --header 'Accept: */*' \
-  --header 'x-api-key-name: key_google_api' \
+  --header 'x-api-key-name: key_my_google_translate_api' \
   --header 'Content-Type: application/json' \
   -d '{
   "q": ["Hello world", "My name is Angelo"],
