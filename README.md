@@ -27,3 +27,33 @@ KEY_AWS_API=header|authorization|Bearer token
 - Run `deta new` to deploy the app to `deta.sh`
 - Run `deta deploy` for subsequent change deployment
 - Run `deta update -e .env` to update the instance environment variables
+
+## Sample usage
+```bash
+# request
+curl -X POST \
+  'https://api.ghelo.dev/proxy?url=https://translation.googleapis.com/language/translate/v2' \
+  --header 'Accept: */*' \
+  --header 'x-api-key-name: key_google_api' \
+  --header 'Content-Type: application/json' \
+  -d '{
+  "q": ["Hello world", "My name is Angelo"],
+  "target": "tl"
+}'
+
+# response
+{
+  "data": {
+    "translations": [
+      {
+        "translatedText": "Hello mundo",
+        "detectedSourceLanguage": "en"
+      },
+      {
+        "translatedText": "Ang pangalan ko ay Angelo",
+        "detectedSourceLanguage": "en"
+      }
+    ]
+  }
+}
+```
